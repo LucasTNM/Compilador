@@ -56,6 +56,9 @@ class Lexer:
             ('TOKEN_VIRGULA',       r','),
             ('TOKEN_PONTOVIRGULA',  r';'),
             
+            # --- Comentários ---
+            ('COMMENT',             r'\#.*'),
+            
             # --- Ignorados (Espaços e Quebras de Linha) ---
             ('SKIP',                r'[ \t]+'),
             ('NEWLINE',             r'\n'),
@@ -74,8 +77,10 @@ class Lexer:
                     if tipo == 'NEWLINE':
                         self.linha += 1
                         self.coluna = 1
-                    elif tipo != 'SKIP':
-                        # Se não for espaço ou quebra de linha, salva o token
+                    elif tipo in ('SKIP', 'COMMENT'):
+                        # Ignora espaços e comentários
+                        pass
+                    else:
                         token = Token(tipo, texto_capturado, self.linha, self.coluna)
                         self.tokens.append(token)
                     

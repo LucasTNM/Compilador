@@ -1,0 +1,7 @@
+sem_cao main() salve
+    papo_reto base receba 10 ;
+    papo_reto altura receba 5 ;
+    papo_reto area receba base * altura ;
+    
+    grita_baixo area ;
+flw

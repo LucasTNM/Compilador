@@ -45,3 +45,15 @@ class Identificador(AST):
     def __init__(self, token):
         self.token = token
         self.nome = token.valor      # Ex: 'minha_idade'
+        
+class EnquantoRender(AST): # Nosso 'While'
+    def __init__(self, condicao, bloco):
+        self.condicao = condicao
+        self.bloco = bloco
+        
+class Funcao(AST):
+    def __init__(self, tipo_retorno, nome, parametros, bloco_comandos):
+        self.tipo_retorno = tipo_retorno
+        self.nome = nome
+        self.parametros = parametros
+        self.bloco_comandos = bloco_comandos
