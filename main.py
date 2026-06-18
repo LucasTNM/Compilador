@@ -18,7 +18,7 @@ def compilar_arquivo(caminho_origem, caminho_destino):
 
         # 3. Análise Sintática (AST)
         parser = Parser(tokens)
-        arvore = parser.program()
+        arvore = parser.programa()
 
         # 4. Análise Semântica
         semantico = AnalisadorSemantico()

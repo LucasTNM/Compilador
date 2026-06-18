@@ -1,17 +1,28 @@
-Classe / Finalidade,Palavra-chave / Símbolo,Nome do Token
-Início de Bloco,salve,TOKEN_SALVE
-Fim de Bloco,flw,TOKEN_FLW
-Se,se_pa,TOKEN_SE_PA
-Então,boto_fe,TOKEN_BOTO_FE
-Senão,outro_trem,TOKEN_OUTRO_TREM
-Enquanto,enquanto_render,TOKEN_ENQUANTO_RENDER
-Saída (Print),grita_baixo,TOKEN_GRITA_BAIXO
-Tipo Inteiro,papo_reto,TOKEN_INT
-Tipo Float,papo_torto,TOKEN_FLOAT
-Tipo Char,letra,TOKEN_CHAR
-Tipo Void,sem_cao,TOKEN_VOID
-Retorno,vaza,TOKEN_VAZA
-Atribuição,receba,TOKEN_OP_ATRIB
-AND Lógico,e,TOKEN_OP_AND
-OR Lógico,ou,TOKEN_OP_OR
-NOT Lógico,nao,TOKEN_OP_NOT
+1 - <Programa> ::= <ListaFuncoes> $
+2 - <ListaFuncoes> ::= <Funcao> <ListaFuncoes> | epsilon
+3 - <Funcao> ::= <Tipo> id ( <Parametros> ) salve <ListaComandos> flw
+4 - <Tipo> ::= papo_reto | papo_torto | letra | sem_cao
+5 - <Parametros> ::= <Tipo> id <CaudaParam> | epsilon
+6 - <CaudaParam> ::= , <Tipo> id <CaudaParam> | epsilon
+7 - <ListaComandos> ::= <Comando> <ListaComandos> | epsilon
+8 - <Comando> ::= <Declaracao> | <ComandoSe> | <ComandoEnquanto> | <ComandoGrita> | id <CaudaId>
+9 - <CaudaId> ::= receba <Expr> ;
+10 - <Declaracao> ::= <Tipo> id receba <Expr> ;
+11 - <ComandoSe> ::= se_pa <Expr> boto_fe salve <ListaComandos> flw <CaudaSe>
+12 - <CaudaSe> ::= outro_trem salve <ListaComandos> flw | epsilon
+13 - <ComandoEnquanto> ::= enquanto_render <Expr> salve <ListaComandos> flw
+14 - <ComandoGrita> ::= grita_baixo <Expr> ;
+15 - <Expr> ::= <ExprE> <CaudaExpr>
+16 - <CaudaExpr> ::= ou <ExprE> <CaudaExpr> | epsilon
+17 - <ExprE> ::= <ExprRel> <CaudaExprE>
+18 - <CaudaExprE> ::= e <ExprRel> <CaudaExprE> | epsilon
+19 - <ExprRel> ::= <ExprSoma> <CaudaExprRel>
+20 - <CaudaExprRel> ::= <OpRel> <ExprSoma> | epsilon
+21 - <OpRel> ::= == | != | > | < | >= | <=
+22 - <ExprSoma> ::= <ExprMult> <CaudaExprSoma>
+23 - <CaudaExprSoma> ::= <OpSoma> <ExprMult> <CaudaExprSoma> | epsilon
+24 - <OpSoma> ::= + | -
+25 - <ExprMult> ::= <Primario> <CaudaExprMult>
+26 - <CaudaExprMult> ::= <OpMult> <Primario> <CaudaExprMult> | epsilon
+27 - <OpMult> ::= * | / | %
+28 - <Primario> ::= id | num_int | num_float | const_char | ( <Expr> )

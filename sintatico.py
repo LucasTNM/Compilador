@@ -26,41 +26,41 @@ class Parser:
     # ==========================================
 
     # Program -> FuncList
-    def program(self):
-        funcoes = self.func_list()
+    def programa(self):
+        funcoes = self.lista_funcoes()
         self.match('EOF') # Garante que lemos até o fim do arquivo!
         return Programa(funcoes)
 
     # FuncList -> Func FuncList | epsilon
-    def func_list(self):
+    def lista_funcoes(self):
         funcoes = []
         # First(Func) são os tipos!
         tipos_validos = ['TOKEN_INT', 'TOKEN_FLOAT', 'TOKEN_CHAR', 'TOKEN_VOID']
         
         while self.token_atual.tipo in tipos_validos:
-            funcoes.append(self.func())
+            funcoes.append(self.funcao())
             
         return funcoes
 
     # Func -> Type id ( Params ) salve StmtList flw
-    def func(self):
+    def funcao(self):
         tipo_retorno = self.token_atual.valor
         self.avancar() # Já sabemos que é um tipo pelo while acima
         
         token_id = self.match('TOKEN_ID')
         
         self.match('TOKEN_LPAREN')
-        parametros = self.params() # Vamos simular os params por enquanto
+        parametros = self.parametros() # Vamos simular os params por enquanto
         self.match('TOKEN_RPAREN')
         
         self.match('TOKEN_SALVE')
-        bloco = self.stmt_list()
+        bloco = self.lista_comandos()
         self.match('TOKEN_FLW')
         
         return Funcao(tipo_retorno, token_id.valor, parametros, bloco)
 
     # Params -> Type id ParamTail | epsilon
-    def params(self):
+    def parametros(self):
         lista_params = []
         tipos_validos = ['TOKEN_INT', 'TOKEN_FLOAT', 'TOKEN_CHAR']
         
@@ -108,19 +108,19 @@ class Parser:
 # Expr -> ExprAnd ExprTail
     # ExprTail -> ou ExprAnd ExprTail | epsilon
     def expr(self):
-        no_esquerdo = self.expr_and()
+        no_esquerdo = self.expr_e()
 
         while self.token_atual.tipo == 'TOKEN_OP_OR':
             token_operador = self.token_atual
             self.avancar()
-            no_direito = self.expr_and()
+            no_direito = self.expr_e()
             no_esquerdo = OpBinaria(no_esquerdo, token_operador, no_direito)
 
         return no_esquerdo
 
     # ExprAnd -> ExprRel ExprAndTail
     # ExprAndTail -> e ExprRel ExprAndTail | epsilon
-    def expr_and(self):
+    def expr_e(self):
         no_esquerdo = self.expr_rel()
 
         while self.token_atual.tipo == 'TOKEN_OP_AND':
@@ -135,13 +135,13 @@ class Parser:
     # ExprRelTail -> RelOp ExprAdd | epsilon
     def expr_rel(self):
         # Chama a matemática básica que você já fez!
-        no_esquerdo = self.expr_add()
+        no_esquerdo = self.expr_soma()
 
         # Operadores: ==, !=, >, <, >=, <=
         if self.token_atual.tipo == 'TOKEN_OP_REL':
             token_operador = self.token_atual
             self.avancar()
-            no_direito = self.expr_add()
+            no_direito = self.expr_soma()
             # Diferente das outras, relacionais não encadeiam (não fazemos a < b < c)
             # Por isso usamos um 'if' ao invés de 'while'
             no_esquerdo = OpBinaria(no_esquerdo, token_operador, no_direito)
@@ -154,7 +154,7 @@ class Parser:
 
     # ExprAdd -> ExprMult ExprAddTail
     # ExprAddTail -> (+ | -) ExprMult ExprAddTail | epsilon
-    def expr_add(self):
+    def expr_soma(self):
         # 1. Primeiro, tentamos ler uma multiplicação (precedência maior)
         no_esquerdo = self.expr_mult()
 
@@ -176,19 +176,19 @@ class Parser:
     # ExprMultTail -> (* | / | %) ExprUnary ExprMultTail | epsilon
     def expr_mult(self):
         # Desce para a próxima regra de precedência (unários/primários)
-        no_esquerdo = self.fator_primario() # Pulamos o ExprUnary para simplificar este exemplo
+        no_esquerdo = self.primario() # Pulamos o ExprUnary para simplificar este exemplo
 
         while self.token_atual.tipo == 'TOKEN_OP_ARIT' and self.token_atual.valor in ['*', '/', '%']:
             token_operador = self.token_atual
             self.avancar() # Consome o '*', '/' ou '%'
             
-            no_direito = self.fator_primario()
+            no_direito = self.primario()
             no_esquerdo = OpBinaria(no_esquerdo, token_operador, no_direito)
 
         return no_esquerdo
 
     # Primary -> id | num_int | num_float | ( Expr )
-    def fator_primario(self):
+    def primario(self):
         token = self.token_atual
 
         if token.tipo == 'TOKEN_NUM_INT' or token.tipo == 'TOKEN_NUM_FLOAT':
@@ -214,7 +214,7 @@ class Parser:
     # ==========================================
 
     # StmtList -> Stmt StmtList | epsilon
-    def stmt_list(self):
+    def lista_comandos(self):
         comandos = []
         # O First(Stmt) dita quando continuamos lendo comandos.
         # Quais tokens iniciam um comando? Tipos, 'se_pa', 'enquanto_render', 'grita_baixo', 'vaza' e IDs.
@@ -225,14 +225,14 @@ class Parser:
         ]
         
         while self.token_atual.tipo in tokens_de_inicio:
-            comando = self.stmt()
+            comando = self.comando()
             if comando:
                 comandos.append(comando)
                 
         return comandos # Retorna uma lista de nós AST
 
     # Stmt -> Dcl | IfStmt | WhileStmt | PrintStmt | ReturnStmt | id IdTail
-    def stmt(self):
+    def comando(self):
         tipo = self.token_atual.tipo
         
         if tipo in ['TOKEN_INT', 'TOKEN_FLOAT', 'TOKEN_CHAR', 'TOKEN_VOID']:
@@ -240,16 +240,16 @@ class Parser:
         elif tipo == 'TOKEN_SE_PA':
             return self.comando_se()
         elif tipo == 'TOKEN_ENQUANTO_RENDER':
-            return self.comando_while()
+            return self.comando_enquanto()
         elif tipo == 'TOKEN_GRITA_BAIXO':
-            return self.comando_print()
+            return self.comando_grita()
         elif tipo == 'TOKEN_ID':
-            return self.comando_id_tail()
+            return self.cauda_id()
         else:
             raise SyntaxError(f"Erro Sintático: Comando não reconhecido '{self.token_atual.valor}' na linha {self.token_atual.linha}")
 
     # PrintStmt -> grita_baixo Expr ;
-    def comando_print(self):
+    def comando_grita(self):
         self.match('TOKEN_GRITA_BAIXO')
         
         # Lemos a expressão que será impressa
@@ -259,20 +259,20 @@ class Parser:
         return GritaBaixo(expr)
 
     # WhileStmt -> enquanto_render Expr salve StmtList flw
-    def comando_while(self):
+    def comando_enquanto(self):
         self.match('TOKEN_ENQUANTO_RENDER')
         
         condicao = self.expr()  # Usa a gramática de expressão completa
         
         self.match('TOKEN_SALVE')
-        bloco = self.stmt_list()
+        bloco = self.lista_comandos()
         self.match('TOKEN_FLW')
         
         return EnquantoRender(condicao, bloco)
 
     # Lida com regras do tipo: id IdTail
     # IdTail -> receba Expr ; | ( Args ) ;
-    def comando_id_tail(self):
+    def cauda_id(self):
         # 1. Consome o ID (ex: 'minha_idade')
         token_id = self.match('TOKEN_ID')
         
@@ -301,7 +301,7 @@ class Parser:
         self.match('TOKEN_SALVE')
         
         # 2. Lê os comandos de dentro do 'If'
-        bloco_verdadeiro = self.stmt_list()
+        bloco_verdadeiro = self.lista_comandos()
         
         self.match('TOKEN_FLW')
         
@@ -311,7 +311,7 @@ class Parser:
         if self.token_atual.tipo == 'TOKEN_OUTRO_TREM':
             self.avancar() # Consome o 'outro_trem'
             self.match('TOKEN_SALVE')
-            bloco_falso = self.stmt_list()
+            bloco_falso = self.lista_comandos()
             self.match('TOKEN_FLW')
             
         return SePa(condicao, bloco_verdadeiro, bloco_falso)
