@@ -1,0 +1,204 @@
+Conjunto FIRST
+
+FIRST(<Programa>) = { papo_reto, papo_torto, letra, sem_cao, $ }
+FIRST(<ListaFuncoes>) = { papo_reto, papo_torto, letra, sem_cao, epsilon }
+FIRST(<Funcao>) = { papo_reto, papo_torto, letra, sem_cao }
+FIRST(<Tipo>) = { papo_reto, papo_torto, letra, sem_cao }
+FIRST(<Parametros>) = { papo_reto, papo_torto, letra, sem_cao, epsilon }
+FIRST(<CaudaParam>) = { ,, epsilon }
+FIRST(<ListaComandos>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, epsilon }
+FIRST(<Comando>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id }
+FIRST(<CaudaId>) = { receba }
+FIRST(<Declaracao>) = { papo_reto, papo_torto, letra, sem_cao }
+FIRST(<ComandoSe>) = { se_pa }
+FIRST(<CaudaSe>) = { outro_trem, epsilon }
+FIRST(<ComandoEnquanto>) = { enquanto_render }
+FIRST(<ComandoGrita>) = { grita_baixo }
+FIRST(<Expr>) = { id, num_int, num_float, const_char, ( }
+FIRST(<CaudaExpr>) = { ou, epsilon }
+FIRST(<ExprE>) = { id, num_int, num_float, const_char, ( }
+FIRST(<CaudaExprE>) = { e, epsilon }
+FIRST(<ExprRel>) = { id, num_int, num_float, const_char, ( }
+FIRST(<CaudaExprRel>) = { ==, !=, >, <, >=, <=, epsilon }
+FIRST(<OpRel>) = { ==, !=, >, <, >=, <= }
+FIRST(<ExprSoma>) = { id, num_int, num_float, const_char, ( }
+FIRST(<CaudaExprSoma>) = { +, -, epsilon }
+FIRST(<OpSoma>) = { +, - }
+FIRST(<ExprMult>) = { id, num_int, num_float, const_char, ( }
+FIRST(<CaudaExprMult>) = { *, /, %, epsilon }
+FIRST(<OpMult>) = { *, /, % }
+FIRST(<Primario>) = { id, num_int, num_float, const_char, ( }
+
+Conjunto FOLLOW
+
+FOLLOW(<Programa>) = { $ }
+FOLLOW(<ListaFuncoes>) = { $ }
+FOLLOW(<Funcao>) = { papo_reto, papo_torto, letra, sem_cao, $ }
+FOLLOW(<Tipo>) = { id }
+FOLLOW(<Parametros>) = { ) }
+FOLLOW(<CaudaParam>) = { ) }
+FOLLOW(<ListaComandos>) = { flw }
+FOLLOW(<Comando>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, flw }
+FOLLOW(<CaudaId>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, flw }
+FOLLOW(<Declaracao>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, flw }
+FOLLOW(<ComandoSe>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, flw }
+FOLLOW(<CaudaSe>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, flw }
+FOLLOW(<ComandoEnquanto>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, flw }
+FOLLOW(<ComandoGrita>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, flw }
+FOLLOW(<Expr>) = { ;, boto_fe, salve, ) }
+FOLLOW(<CaudaExpr>) = { ;, boto_fe, salve, ) }
+FOLLOW(<ExprE>) = { ou, ;, boto_fe, salve, ) }
+FOLLOW(<CaudaExprE>) = { ou, ;, boto_fe, salve, ) }
+FOLLOW(<ExprRel>) = { e, ou, ;, boto_fe, salve, ) }
+FOLLOW(<CaudaExprRel>) = { e, ou, ;, boto_fe, salve, ) }
+FOLLOW(<OpRel>) = { id, num_int, num_float, const_char, ( }
+FOLLOW(<ExprSoma>) = { ==, !=, >, <, >=, <=, e, ou, ;, boto_fe, salve, ) }
+FOLLOW(<CaudaExprSoma>) = { ==, !=, >, <, >=, <=, e, ou, ;, boto_fe, salve, ) }
+FOLLOW(<OpSoma>) = { id, num_int, num_float, const_char, ( }
+FOLLOW(<ExprMult>) = { +, -, ==, !=, >, <, >=, <=, e, ou, ;, boto_fe, salve, ) }
+FOLLOW(<CaudaExprMult>) = { +, -, ==, !=, >, <, >=, <=, e, ou, ;, boto_fe, salve, ) }
+FOLLOW(<OpMult>) = { id, num_int, num_float, const_char, ( }
+FOLLOW(<Primario>) = { *, /, %, +, -, ==, !=, >, <, >=, <=, e, ou, ;, boto_fe, salve, ) }
+
+Conjunto PREDICT
+
+1. <Programa>
+
+PREDICT(<Programa> ::= <ListaFuncoes> $) = { papo_reto, papo_torto, letra, sem_cao, $ }
+
+2. <ListaFuncoes>
+
+PREDICT(<ListaFuncoes> ::= <Funcao> <ListaFuncoes>) = { papo_reto, papo_torto, letra, sem_cao }
+PREDICT(<ListaFuncoes> ::= epsilon) = { $ }
+
+3. <Funcao>
+
+PREDICT(<Funcao> ::= <Tipo> id ( <Parametros> ) salve <ListaComandos> flw) = { papo_reto, papo_torto, letra, sem_cao }
+
+4. <Tipo>
+
+PREDICT(<Tipo> ::= papo_reto) = { papo_reto }
+PREDICT(<Tipo> ::= papo_torto) = { papo_torto }
+PREDICT(<Tipo> ::= letra) = { letra }
+PREDICT(<Tipo> ::= sem_cao) = { sem_cao }
+
+5. <Parametros>
+
+PREDICT(<Parametros> ::= <Tipo> id <CaudaParam>) = { papo_reto, papo_torto, letra, sem_cao }
+PREDICT(<Parametros> ::= epsilon) = { ) }
+
+6. <CaudaParam>
+
+PREDICT(<CaudaParam> ::= , <Tipo> id <CaudaParam>) = { , }
+PREDICT(<CaudaParam> ::= epsilon) = { ) }
+
+7. <ListaComandos>
+
+PREDICT(<ListaComandos> ::= <Comando> <ListaComandos>) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id }
+PREDICT(<ListaComandos> ::= epsilon) = { flw }
+
+8. <Comando>
+
+PREDICT(<Comando> ::= <Declaracao>) = { papo_reto, papo_torto, letra, sem_cao }
+PREDICT(<Comando> ::= <ComandoSe>) = { se_pa }
+PREDICT(<Comando> ::= <ComandoEnquanto>) = { enquanto_render }
+PREDICT(<Comando> ::= <ComandoGrita>) = { grita_baixo }
+PREDICT(<Comando> ::= id <CaudaId>) = { id }
+
+9. <CaudaId>
+
+PREDICT(<CaudaId> ::= receba <Expr> ;) = { receba }
+
+10. <Declaracao>
+
+PREDICT(<Declaracao> ::= <Tipo> id receba <Expr> ;) = { papo_reto, papo_torto, letra, sem_cao }
+
+11. <ComandoSe>
+
+PREDICT(<ComandoSe> ::= se_pa <Expr> boto_fe salve <ListaComandos> flw <CaudaSe>) = { se_pa }
+
+12. <CaudaSe>
+
+PREDICT(<CaudaSe> ::= outro_trem salve <ListaComandos> flw) = { outro_trem }
+PREDICT(<CaudaSe> ::= epsilon) = { papo_reto, papo_torto, letra, sem_cao, se_pa, enquanto_render, grita_baixo, id, flw }
+
+13. <ComandoEnquanto>
+
+PREDICT(<ComandoEnquanto> ::= enquanto_render <Expr> salve <ListaComandos> flw) = { enquanto_render }
+
+14. <ComandoGrita>
+
+PREDICT(<ComandoGrita> ::= grita_baixo <Expr> ;) = { grita_baixo }
+
+15. <Expr>
+
+PREDICT(<Expr> ::= <ExprE> <CaudaExpr>) = { id, num_int, num_float, const_char, ( }
+
+16. <CaudaExpr>
+
+PREDICT(<CaudaExpr> ::= ou <ExprE> <CaudaExpr>) = { ou }
+PREDICT(<CaudaExpr> ::= epsilon) = { ;, boto_fe, salve, ) }
+
+17. <ExprE>
+
+PREDICT(<ExprE> ::= <ExprRel> <CaudaExprE>) = { id, num_int, num_float, const_char, ( }
+
+18. <CaudaExprE>
+
+PREDICT(<CaudaExprE> ::= e <ExprRel> <CaudaExprE>) = { e }
+PREDICT(<CaudaExprE> ::= epsilon) = { ou, ;, boto_fe, salve, ) }
+
+19. <ExprRel>
+
+PREDICT(<ExprRel> ::= <ExprSoma> <CaudaExprRel>) = { id, num_int, num_float, const_char, ( }
+
+20. <CaudaExprRel>
+
+PREDICT(<CaudaExprRel> ::= <OpRel> <ExprSoma>) = { ==, !=, >, <, >=, <= }
+PREDICT(<CaudaExprRel> ::= epsilon) = { e, ou, ;, boto_fe, salve, ) }
+
+21. <OpRel>
+
+PREDICT(<OpRel> ::= ==) = { == }
+PREDICT(<OpRel> ::= !=) = { != }
+PREDICT(<OpRel> ::= >) = { > }
+PREDICT(<OpRel> ::= <) = { < }
+PREDICT(<OpRel> ::= >=) = { >= }
+PREDICT(<OpRel> ::= <=) = { <= }
+
+22. <ExprSoma>
+
+PREDICT(<ExprSoma> ::= <ExprMult> <CaudaExprSoma>) = { id, num_int, num_float, const_char, ( }
+
+23. <CaudaExprSoma>
+
+PREDICT(<CaudaExprSoma> ::= <OpSoma> <ExprMult> <CaudaExprSoma>) = { +, - }
+PREDICT(<CaudaExprSoma> ::= epsilon) = { ==, !=, >, <, >=, <=, e, ou, ;, boto_fe, salve, ) }
+
+24. <OpSoma>
+
+PREDICT(<OpSoma> ::= +) = { + }
+PREDICT(<OpSoma> ::= -) = { - }
+
+25. <ExprMult>
+
+PREDICT(<ExprMult> ::= <Primario> <CaudaExprMult>) = { id, num_int, num_float, const_char, ( }
+
+26. <CaudaExprMult>
+
+PREDICT(<CaudaExprMult> ::= <OpMult> <Primario> <CaudaExprMult>) = { *, /, % }
+PREDICT(<CaudaExprMult> ::= epsilon) = { +, -, ==, !=, >, <, >=, <=, e, ou, ;, boto_fe, salve, ) }
+
+27. <OpMult>
+
+PREDICT(<OpMult> ::= *) = { * }
+PREDICT(<OpMult> ::= /) = { / }
+PREDICT(<OpMult> ::= %) = { % }
+
+28. <Primario>
+
+PREDICT(<Primario> ::= id) = { id }
+PREDICT(<Primario> ::= num_int) = { num_int }
+PREDICT(<Primario> ::= num_float) = { num_float }
+PREDICT(<Primario> ::= const_char) = { const_char }
+PREDICT(<Primario> ::= ( <Expr> )) = { ( }
