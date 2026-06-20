@@ -1,0 +1,10 @@
+sem_cao main() salve
+    papo_reto x receba 10 ;
+    papo_torto y receba 3.14 ;
+    
+    # ERRO 1: Tentando somar variáveis não declaradas
+    # papo_reto z receba a + b ;
+    
+    # ERRO 2: Tentando colocar um 'papo_torto' (float) dentro de um 'papo_reto' (int)
+    x receba y ; 
+flw

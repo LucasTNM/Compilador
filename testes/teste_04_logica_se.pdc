@@ -1,0 +1,16 @@
+sem_cao main() salve
+    papo_reto idade receba 20 ;
+    papo_reto saldo receba 100 ;
+    
+    # Testa os operadores '>=' e 'e'
+    se_pa idade >= 18 e saldo > 50 boto_fe salve
+        grita_baixo 1 ; # 1 = Sucesso
+    flw outro_trem salve
+        grita_baixo 0 ; # 0 = Falha
+    flw
+    
+    # Testa o operador 'nao', o '<' e o 'ou'
+    se_pa nao (idade < 18) ou saldo == 0 boto_fe salve
+        grita_baixo 999 ;
+    flw
+flw

@@ -1,0 +1,13 @@
+sem_cao main() salve
+    # Testa a leitura da letra literal
+    letra inicial receba 'L' ; 
+    grita_baixo inicial ;      # No assembly SAM, isso deve jogar o valor ASCII na tela!
+    
+    papo_reto contador receba 0 ;
+    
+    # Testa o loop e o operador '<'
+    enquanto_render contador < 3 salve
+        grita_baixo contador ;
+        contador receba contador + 1 ;
+    flw
+flw

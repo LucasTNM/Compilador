@@ -107,6 +107,18 @@ class GeradorCodigo:
         elif op == '==':
             self.emitir("CMPEQ")
         # TODO: Adicionar os lógicos 'e' (AND) e 'ou' (OR) e relacionais restantes.
+        elif op == '>=': 
+            self.emitir("CMPIGE")
+        elif op == '<=': 
+            self.emitir("CMPILE")
+        elif op == '!=': 
+            self.emitir("CMPNE")
+        elif op == 'e': 
+            self.emitir("AND")
+        elif op == 'ou': 
+            self.emitir("OR")
+        elif op == '%': 
+            self.emitir("MOD")
 
     def visitar_GritaBaixo(self, no):
         # Avalia a expressão e invoca o comando de saída
@@ -167,3 +179,18 @@ class GeradorCodigo:
 
         # 6. Marcador do fim do laço
         self.emitir(f"{label_fim}:")
+        
+    def visitar_CaractereLiteral(self, no):
+        # Removemos as aspas simples e pegamos o valor ASCII do caractere para colocar na pilha
+        char_puro = no.valor.strip("'")
+        valor_ascii = ord(char_puro)
+        self.emitir(f"PUSHIMM {valor_ascii}")
+
+    def visitar_OpUnaria(self, no):
+        self.visitar(no.expressao)
+        if no.operador.tipo == 'TOKEN_OP_NOT':
+            self.emitir("NOT")
+        elif no.operador.valor == '-':
+            # No SAM, fazer o número negativo é multiplicar por -1
+            self.emitir("PUSHIMM -1")
+            self.emitir("TIMES")

@@ -1,0 +1,14 @@
+sem_cao main() salve
+    papo_reto a receba 10 ;
+    papo_reto b receba -5 ;     # Testando o menos unário!
+    papo_reto c receba 2 ;
+    
+    # Precedência: deve resolver (a + b) primeiro, depois multiplicar.
+    papo_reto resultado receba (a + b) * c ; 
+    
+    # Testando o resto da divisão (10 % 3 = 1)
+    papo_reto resto receba 10 % 3 ;
+    
+    grita_baixo resultado ;
+    grita_baixo resto ;
+flw

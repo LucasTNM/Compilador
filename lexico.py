@@ -44,6 +44,7 @@ class Lexer:
             ('TOKEN_OP_NOT',        r'\bnao\b'),
 
             # --- Números, Identificadores e Símbolos ---
+            ('TOKEN_CHAR_LITERAL',  r"'[^']'"),      # Ex: 'A', 'x'
             ('TOKEN_NUM_FLOAT',     r'\d+\.\d+'),    # Ex: 3.14
             ('TOKEN_NUM_INT',       r'\d+'),         # Ex: 42
             ('TOKEN_ID',            r'[a-zA-Z_][a-zA-Z0-9_]*'), # Variáveis e funções

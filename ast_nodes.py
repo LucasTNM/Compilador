@@ -57,3 +57,13 @@ class Funcao(AST):
         self.nome = nome
         self.parametros = parametros
         self.bloco_comandos = bloco_comandos
+        
+class OpUnaria(AST):
+    def __init__(self, operador, expressao):
+        self.operador = operador  # O token (ex: 'nao' ou '-')
+        self.expressao = expressao
+
+class CaractereLiteral(AST):
+    def __init__(self, token):
+        self.token = token
+        self.valor = token.valor  # Ex: "'A'"

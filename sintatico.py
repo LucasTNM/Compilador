@@ -171,18 +171,27 @@ class Parser:
             no_esquerdo = OpBinaria(no_esquerdo, token_operador, no_direito)
 
         return no_esquerdo
+    
+    # ExprUnary -> nao ExprUnary | - ExprUnary | Primary
+    def expr_unaria(self):
+        if self.token_atual.tipo == 'TOKEN_OP_NOT' or (self.token_atual.tipo == 'TOKEN_OP_ARIT' and self.token_atual.valor == '-'):
+            token_operador = self.token_atual
+            self.avancar()
+            expr = self.expr_unaria()
+            return OpUnaria(token_operador, expr)
+        else:
+            return self.primario()
 
     # ExprMult -> ExprUnary ExprMultTail
     # ExprMultTail -> (* | / | %) ExprUnary ExprMultTail | epsilon
     def expr_mult(self):
-        # Desce para a próxima regra de precedência (unários/primários)
-        no_esquerdo = self.primario() # Pulamos o ExprUnary para simplificar este exemplo
-
+        no_esquerdo = self.expr_unaria() # Mudou aqui!
+        
         while self.token_atual.tipo == 'TOKEN_OP_ARIT' and self.token_atual.valor in ['*', '/', '%']:
             token_operador = self.token_atual
-            self.avancar() # Consome o '*', '/' ou '%'
+            self.avancar()
             
-            no_direito = self.primario()
+            no_direito = self.expr_unaria() # E mudou aqui!
             no_esquerdo = OpBinaria(no_esquerdo, token_operador, no_direito)
 
         return no_esquerdo
@@ -194,6 +203,10 @@ class Parser:
         if token.tipo == 'TOKEN_NUM_INT' or token.tipo == 'TOKEN_NUM_FLOAT':
             self.avancar()
             return Numero(token)
+        
+        elif token.tipo == 'TOKEN_CHAR_LITERAL':
+            self.avancar()
+            return CaractereLiteral(token)
             
         elif token.tipo == 'TOKEN_ID':
             self.avancar()

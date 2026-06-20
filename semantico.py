@@ -138,4 +138,20 @@ class AnalisadorSemantico:
         self.pilha_escopos.append({})
         for comando in no.bloco:
             self.visitar(comando)
-        self.pilha_escopos.pop()    
+        self.pilha_escopos.pop()
+        
+    def visitar_CaractereLiteral(self, no):
+        return 'letra'
+
+    def visitar_OpUnaria(self, no):
+        tipo_expr = self.visitar(no.expressao)
+        
+        if no.operador.tipo == 'TOKEN_OP_NOT':
+            if tipo_expr not in ['papo_reto', 'booleano']:
+                raise Exception(f"Erro Semântico: Operador 'nao' exige um booleano, recebeu '{tipo_expr}'.")
+            return 'booleano'
+            
+        elif no.operador.valor == '-':
+            if tipo_expr not in ['papo_reto', 'papo_torto']:
+                raise Exception(f"Erro Semântico: Menos unário exige um número, recebeu '{tipo_expr}'.")
+            return tipo_expr
