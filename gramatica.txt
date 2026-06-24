@@ -22,7 +22,8 @@
 22 - <ExprSoma> ::= <ExprMult> <CaudaExprSoma>
 23 - <CaudaExprSoma> ::= <OpSoma> <ExprMult> <CaudaExprSoma> | epsilon
 24 - <OpSoma> ::= + | -
-25 - <ExprMult> ::= <Primario> <CaudaExprMult>
-26 - <CaudaExprMult> ::= <OpMult> <Primario> <CaudaExprMult> | epsilon
+25 - <ExprMult> ::= <ExprUnaria> <CaudaExprMult>
+26 - <CaudaExprMult> ::= <OpMult> <ExprUnaria> <CaudaExprMult> | epsilon
 27 - <OpMult> ::= * | / | %
-28 - <Primario> ::= id | num_int | num_float | const_char | ( <Expr> )
+28 - <ExprUnaria> ::= nao <ExprUnaria> | - <ExprUnaria> | <Primario>
+29 - <Primario> ::= id | num_int | num_float | const_char | ( <Expr> )

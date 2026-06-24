@@ -5,26 +5,26 @@ class AST:
 
 class Programa(AST):
     def __init__(self, funcoes):
-        self.funcoes = funcoes  # Lista de funções do programa
+        self.funcoes = funcoes 
 
 class DeclaracaoVar(AST):
     def __init__(self, tipo, nome_id, expressao=None):
-        self.tipo = tipo             # Ex: 'papo_reto' (int)
-        self.nome_id = nome_id       # Ex: 'minha_idade'
-        self.expressao = expressao   # O que ela recebe (pode ser None)
+        self.tipo = tipo
+        self.nome_id = nome_id
+        self.expressao = expressao
 
 class Atribuicao(AST):
     def __init__(self, nome_id, expressao):
         self.nome_id = nome_id
         self.expressao = expressao
 
-class SePa(AST): # Nosso 'If'
+class SePa(AST): # IF
     def __init__(self, condicao, bloco_verdadeiro, bloco_falso=None):
         self.condicao = condicao
         self.bloco_verdadeiro = bloco_verdadeiro
         self.bloco_falso = bloco_falso
 
-class GritaBaixo(AST): # Nosso 'Print'
+class GritaBaixo(AST):
     def __init__(self, expressao):
         self.expressao = expressao
 
@@ -32,21 +32,21 @@ class GritaBaixo(AST): # Nosso 'Print'
 
 class OpBinaria(AST):
     def __init__(self, esquerda, operador, direita):
-        self.esquerda = esquerda     # Nó do lado esquerdo
-        self.operador = operador     # O token do operador (ex: '+', '>', '==')
-        self.direita = direita       # Nó do lado direito
+        self.esquerda = esquerda   
+        self.operador = operador     
+        self.direita = direita       
 
 class Numero(AST):
     def __init__(self, token):
         self.token = token
-        self.valor = token.valor     # Ex: '20'
+        self.valor = token.valor    
 
 class Identificador(AST):
     def __init__(self, token):
         self.token = token
-        self.nome = token.valor      # Ex: 'minha_idade'
+        self.nome = token.valor    
         
-class EnquantoRender(AST): # Nosso 'While'
+class EnquantoRender(AST): # While
     def __init__(self, condicao, bloco):
         self.condicao = condicao
         self.bloco = bloco
@@ -60,10 +60,10 @@ class Funcao(AST):
         
 class OpUnaria(AST):
     def __init__(self, operador, expressao):
-        self.operador = operador  # O token (ex: 'nao' ou '-')
+        self.operador = operador  
         self.expressao = expressao
 
 class CaractereLiteral(AST):
     def __init__(self, token):
         self.token = token
-        self.valor = token.valor  # Ex: "'A'"
+        self.valor = token.valor

@@ -5,7 +5,7 @@ from semantico import AnalisadorSemantico
 from gerador_codigo import GeradorCodigo
 
 def compilar_arquivo(caminho_origem, caminho_destino):
-    print(f"⏳ Compilando: {caminho_origem} ...")
+    print(f"Compilando: {caminho_origem} ...")
     
     try:
         # 1. Lê o código-fonte do arquivo
@@ -32,10 +32,10 @@ def compilar_arquivo(caminho_origem, caminho_destino):
         with open(caminho_destino, 'w', encoding='utf-8') as f:
             f.write(codigo_sam)
             
-        print(f"✅ SUCESSO! Assembly gerado em: {caminho_destino}\n")
+        print(f"Assembly gerado em: {caminho_destino}\n")
         
     except Exception as e:
-        print(f"❌ FALHA NA COMPILAÇÃO do arquivo {caminho_origem}:")
+        print(f"Falha na compilação do arquivo {caminho_origem}:")
         print(f"   Detalhe: {e}\n")
 
 # ==========================================

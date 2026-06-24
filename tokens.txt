@@ -10,7 +10,6 @@ Tipo Inteiro,papo_reto,TOKEN_INT
 Tipo Float,papo_torto,TOKEN_FLOAT
 Tipo Char,letra,TOKEN_CHAR
 Tipo Void,sem_cao,TOKEN_VOID
-Retorno,vaza,TOKEN_VAZA
 Atribuição,receba,TOKEN_OP_ATRIB
 AND Lógico,e,TOKEN_OP_AND
 OR Lógico,ou,TOKEN_OP_OR

@@ -1,0 +1,32 @@
+sem_cao main() salve
+papo_reto x receba 10 ;
+papo_reto y receba 20 ;
+
+# 1. Testando Diferente (!=)
+# 10 != 20 é Verdadeiro. Deve imprimir 1.
+se_pa x != y boto_fe salve
+    grita_baixo 1 ;
+flw
+
+# 2. Testando Menor ou Igual (<=)
+# 10 <= 20 é Verdadeiro. Deve imprimir 2.
+se_pa x <= y boto_fe salve
+    grita_baixo 2 ;
+flw
+
+# 3. Testando Maior ou Igual (>=)
+# 10 >= 20 é Falso. Vai cair no outro_trem e imprimir 0.
+se_pa x >= y boto_fe salve
+    grita_baixo 3 ;
+flw outro_trem salve
+    grita_baixo 0 ;
+flw
+
+# 4. Igualdade (==) combinada com Maior ou Igual (>=)
+papo_reto z receba 10 ;
+se_pa x == z e z >= 10 boto_fe salve
+    grita_baixo 4 ; # Verdadeiro, deve imprimir 4
+flw
+
+
+flw

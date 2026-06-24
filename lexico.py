@@ -1,17 +1,15 @@
 import re
 
-# 1. Definição da Classe Token
 class Token:
     def __init__(self, tipo, valor, linha, coluna):
-        self.tipo = tipo       # Ex: 'TOKEN_SE_PA'
-        self.valor = valor     # Ex: 'se_pa'
+        self.tipo = tipo      
+        self.valor = valor     
         self.linha = linha     # Linha onde o token apareceu (útil para mensagens de erro)
         self.coluna = coluna   # Coluna onde o token apareceu
 
     def __repr__(self):
         return f"Token({self.tipo}, '{self.valor}', Linha: {self.linha})"
-
-# 2. Definição do Analisador Léxico
+    
 class Lexer:
     def __init__(self, codigo_fonte):
         self.codigo = codigo_fonte
@@ -20,10 +18,9 @@ class Lexer:
         self.coluna = 1
         self.tokens = []
 
-        # 3. Mapeamento das Expressões Regulares (A Ordem Importa!)
-        # Usamos \b (Word Boundary) para garantir que pegamos a palavra exata
+        # Mapeamento das Expressões Regulares (A Ordem Importa!)
         self.regras = [
-            # --- Palavras-chave (Suas Gírias!) ---
+            # Girias e tokens 
             ('TOKEN_SALVE',         r'\bsalve\b'),
             ('TOKEN_FLW',           r'\bflw\b'),
             ('TOKEN_SE_PA',         r'\bse_pa\b'),
@@ -78,17 +75,15 @@ class Lexer:
                     if tipo == 'NEWLINE':
                         self.linha += 1
                         self.coluna = 1
-                    elif tipo in ('SKIP', 'COMMENT'):
-                        # Ignora espaços e comentários
+                    elif tipo in ('SKIP', 'COMMENT'): # Ignora espaços e comentários
                         pass
                     else:
                         token = Token(tipo, texto_capturado, self.linha, self.coluna)
                         self.tokens.append(token)
                     
-                    # Avança a leitura
                     self.posicao = match.end()
                     self.coluna += len(texto_capturado)
-                    break # Sai do loop do 'for' e volta pro 'while'
+                    break
             
             if not match:
                 # Se nenhum regex casou, temos um caractere inválido!
